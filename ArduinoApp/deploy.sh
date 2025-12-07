@@ -46,22 +46,23 @@ sleep 3
 curl -X POST http://localhost:8081/ArduinoApp/estacao \
   -H "Content-Type: application/json" \
   -d '{
-    "nome": "estacao-central",
-    "temperaturaAr": 32,
-    "umidadeAr": 78,
+    "nome": "Skymetric",
+    "temperaturaAr": 32.5,
+    "umidadeAr": 78.9,
     "pressaoAr": 1012,
-    "indice_uv": 40
+    "indice_uv": 3
   }'
 
  curl -X POST http://localhost:8081/ArduinoApp/irrigador \
   -H "Content-Type: application/json" \
   -d '{
-    "plantio": "teste",
-    "umidadeSolo": 40,
+    "plantio": "cebolinha",
+    "nome_estacao": "Skymetric",
+    "umidadeSolo": 40.5,
     "acaoAtual": "desligado",
     "tempoRestante":0,
     "cicloDias": 3,
-    "limiarUmidade": 50,
+    "limiarUmidade": 50.7,
     "comando": "desligar"
   }'
 
