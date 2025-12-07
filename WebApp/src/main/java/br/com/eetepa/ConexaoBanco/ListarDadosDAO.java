@@ -1,6 +1,7 @@
 package br.com.eetepa.ConexaoBanco;
 
 import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ListarDadosDAO {
+
+  ZoneId zonaBr = ZoneId.of("America/Santarem");
 
   public Map<String, Object> listarDados() throws SQLException {
 
@@ -29,9 +32,12 @@ public class ListarDadosDAO {
 
       while (result.next()) {
         Map<String, Object> item = new HashMap<>();
-        Timestamp ts = result.getTimestamp("data_hora");
-        item.put("data_hora", ts == null ? null : ts.toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        item.put("id", result.getString("id"));
         item.put("nome", result.getString("nome"));
+        Timestamp ts = result.getTimestamp("data_hora");
+        String data_hora = ts == null ? null
+            : ts.toInstant().atZone(zonaBr).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        item.put("data_hora", data_hora);
         estacoes.add(item);
       }
 
@@ -49,8 +55,7 @@ public class ListarDadosDAO {
         Map<String, Object> item = new HashMap<>();
         item.put("id", result.getInt("id"));
         item.put("plantio", result.getString("plantio"));
-        Timestamp ts = result.getTimestamp("data_hora");
-        item.put("data_hora", ts == null ? null : ts.toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        item.put("id_estacao", result.getString("id_estacao"));
         irrigadores.add(item);
       }
 

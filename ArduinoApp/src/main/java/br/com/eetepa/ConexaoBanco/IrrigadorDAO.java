@@ -10,21 +10,23 @@ import br.com.eetepa.Estacao.EstacaoManager;
 public class IrrigadorDAO {
 
   private IrrigadorManager irrigadorManager = new IrrigadorManager();
-  private EstacaoManager estacaoManager = new EstacaoManager();
+  private EstacaoManager manager = new EstacaoManager();
 
   public void inserirDadosIrrigador(Irrigador irrigador) throws SQLException {
-    String sql = "INSERT INTO irrigadores (plantio, umidadeSolo, acaoAtual, tempoRestante, cicloDias, limiarUmidade, data_hora) VALUES (?,?,?,?,?,?,?);";
+    String sql = "INSERT INTO irrigadores (id_estacao, plantio, umidadeSolo, acaoAtual, tempoRestante, cicloDias, limiarUmidade, nome_estacao) VALUES (?,?,?,?,?,?,?,?);";
 
     try (Connection conn = new ConexaoMysql().getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);) {
 
-      stmt.setString(1, irrigador.getPlantio());
-      stmt.setDouble(2, irrigador.getUmidadeSolo());
-      stmt.setString(3, irrigadorManager.getComando(irrigador));
-      stmt.setInt(4, irrigador.getTempoRestante());
-      stmt.setInt(5, irrigador.getCicloDias());
-      stmt.setInt(6, irrigador.getLimiarUmidade());
-      stmt.setTimestamp(7, estacaoManager.getEstacao("estacao-central").getData_hora());
+      stmt.setString(1, manager.getEstacao(irrigador.getNome_estacao()).getId());
+      stmt.setString(2, irrigador.getPlantio());
+      stmt.setDouble(3, irrigador.getUmidadeSolo());
+      stmt.setString(4,
+          irrigadorManager.compararComando(irrigadorManager.getComando(irrigador)) ? "ligado" : "desligado");
+      stmt.setInt(5, irrigador.getTempoRestante());
+      stmt.setInt(6, irrigador.getCicloDias());
+      stmt.setDouble(7, irrigador.getLimiarUmidade());
+      stmt.setString(8, irrigador.getNome_estacao());
 
       stmt.executeUpdate();
 
