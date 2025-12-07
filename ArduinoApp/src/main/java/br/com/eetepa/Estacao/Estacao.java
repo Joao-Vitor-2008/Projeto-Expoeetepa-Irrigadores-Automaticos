@@ -1,6 +1,7 @@
 package br.com.eetepa.Estacao;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Estacao {
 
@@ -12,16 +13,13 @@ public class Estacao {
   private int indice_uv;
   private Timestamp data_hora = new java.sql.Timestamp(System.currentTimeMillis());
 
-  // Construtor padrão (necessário para Jackson)
+  // Construtor para gerar o id com UUID
   public Estacao() {
+    id = UUID.randomUUID().toString().replace("-", "");
   }
 
   public String getId() {
     return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getNome() {
