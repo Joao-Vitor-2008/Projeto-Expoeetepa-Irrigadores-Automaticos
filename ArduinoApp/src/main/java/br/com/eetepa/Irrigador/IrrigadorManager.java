@@ -8,20 +8,24 @@ import br.com.eetepa.Estacao.EstacaoManager;
 public class IrrigadorManager {
 
   private Store store = Store.getStoreInstance();
-  private EstacaoManager estacaoManager = new EstacaoManager();
+  private EstacaoManager manager = new EstacaoManager();
 
   public String getComando(Irrigador irrigador) {
-    if (irrigador.getPlantio().equals("x") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
-        && estacaoManager.getEstacao("estacao-central").getTemperaturaAr() > 30) {
-      irrigador.setAcaoAtual("ligar");
+    if (irrigador.getPlantio().equals("cebolinha") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
+        && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 30) {
+      irrigador.setAcaoAtual("ligado");
       return "ligar";
-    } else if (irrigador.getPlantio().equals("y") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
-        && estacaoManager.getEstacao("estacao-central").getTemperaturaAr() > 28) {
-      irrigador.setAcaoAtual("ligar");
+    } else if (irrigador.getPlantio().equals("outros") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
+        && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 28) {
+      irrigador.setAcaoAtual("ligado");
       return "ligar";
     } else {
-      return "desligar";
+      return "desligado";
     }
+  }
+
+  public boolean compararComando(String comando) {
+    return comando.equals("ligar");
   }
 
   public void updateIrrigador(Irrigador irrigador) {
