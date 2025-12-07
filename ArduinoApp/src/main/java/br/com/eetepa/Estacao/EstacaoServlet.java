@@ -1,16 +1,19 @@
 package br.com.eetepa.Estacao;
 
 import br.com.eetepa.ConexaoBanco.EstacaoDAO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.*;
+
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/estacao")
 public class EstacaoServlet extends HttpServlet {
   private EstacaoManager manager = new EstacaoManager();
-  private final ObjectMapper mapper = new ObjectMapper();
+  private Gson gson = new Gson();
   private EstacaoDAO estacaoDAO = new EstacaoDAO();
 
   @Override
@@ -21,7 +24,19 @@ public class EstacaoServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    Estacao estacao = mapper.readValue(req.getInputStream(), Estacao.class);
+    BufferedReader reader = req.getReader();
+
+    StringBuilder sb = new StringBuilder();
+    String line;
+
+    while ((line = reader.readLine()) != null) {
+      sb.append(line);
+    }
+
+    Estacao estacao = gson.fromJson(sb.toString(), Estacao.class);
+
+    resp.setContentType("application/json");
+    resp.getWriter().write(sb.toString());
 
     try {
       estacaoDAO.inserirDadosEstacao(estacao);
