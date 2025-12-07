@@ -4,24 +4,25 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import br.com.eetepa.ConexaoBanco.ListarDadosDAO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebServlet("/ListarDados")
 public class ListarDadosServlet extends HttpServlet {
 
-  private ObjectMapper mapper = new ObjectMapper();
+  ListarDadosDAO listarDadosDAO = new ListarDadosDAO();
+  Gson gson = new Gson();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;charset=UTF-8");
 
-    ListarDadosDAO listarDadosDAO = new ListarDadosDAO();
-
     try {
-      String json = mapper.writeValueAsString(listarDadosDAO.listarDados());
+      String json = gson.toJson(listarDadosDAO.listarDados());
       response.getWriter().write(json);
 
     } catch (Exception e) {
