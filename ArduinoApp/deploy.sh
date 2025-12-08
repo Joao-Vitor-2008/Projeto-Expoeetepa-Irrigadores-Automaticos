@@ -62,7 +62,7 @@ curl -X POST http://localhost:8081/ArduinoApp/estacao \
     "acaoAtual": "desligado",
     "tempoRestante":0,
     "cicloDias": 3,
-    "limiarUmidade": 50.7,
+    "limiarUmidade": 50,
     "comando": "desligar"
   }'
 

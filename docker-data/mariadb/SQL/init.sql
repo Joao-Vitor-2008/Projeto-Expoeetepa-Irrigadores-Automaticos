@@ -23,7 +23,7 @@ CREATE TABLE irrigadores (
     acaoAtual      ENUM('ligado','desligado'),
     tempoRestante  INT,
     cicloDias      INT,
-    limiarUmidade  DECIMAL(5,2),
+    limiarUmidade  INT,
     INDEX (id_estacao),
     FOREIGN KEY (id_estacao) REFERENCES estacoes(id)
 );

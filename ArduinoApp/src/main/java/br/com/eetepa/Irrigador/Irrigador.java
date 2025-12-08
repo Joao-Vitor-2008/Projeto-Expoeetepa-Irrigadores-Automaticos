@@ -7,7 +7,7 @@ public class Irrigador {
   private String acaoAtual;
   private int tempoRestante;
   private int cicloDias;
-  private double limiarUmidade;
+  private int limiarUmidade;
   private String comando;
 
   public String getPlantio() {
@@ -62,7 +62,7 @@ public class Irrigador {
     return limiarUmidade;
   }
 
-  public void setLimiarUmidade(double limiarUmidade) {
+  public void setLimiarUmidade(Integer limiarUmidade) {
     this.limiarUmidade = limiarUmidade;
   }
 
