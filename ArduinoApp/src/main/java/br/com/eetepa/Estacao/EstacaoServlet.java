@@ -35,9 +35,6 @@ public class EstacaoServlet extends HttpServlet {
 
     Estacao estacao = gson.fromJson(sb.toString(), Estacao.class);
 
-    resp.setContentType("application/json");
-    resp.getWriter().write(sb.toString());
-
     try {
       estacaoDAO.inserirDadosEstacao(estacao);
     } catch (SQLException e) {

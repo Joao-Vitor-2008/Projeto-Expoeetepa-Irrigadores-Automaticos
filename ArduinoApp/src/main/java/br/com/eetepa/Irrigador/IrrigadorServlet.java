@@ -1,6 +1,5 @@
 package br.com.eetepa.Irrigador;
 
-import br.com.eetepa.ClassesAuxiliares.STATUS;
 import br.com.eetepa.ConexaoBanco.IrrigadorDAO;
 
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +18,6 @@ public class IrrigadorServlet extends HttpServlet {
   private IrrigadorDAO irrigadorDAO = new IrrigadorDAO();
   private IrrigadorManager manager = new IrrigadorManager();
   Gson gson = new Gson();
-  private STATUS status = STATUS.getInstance();
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -48,7 +46,6 @@ public class IrrigadorServlet extends HttpServlet {
     }
 
     resp.setContentType("application/json");
-    resp.getWriter().write("Status" + status.getStatus());
-    resp.getWriter().write(irrigador.toString());
+    resp.getWriter().write("\n\nStatus : " + manager.getComando(irrigador));
   }
 }
