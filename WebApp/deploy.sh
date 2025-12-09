@@ -5,6 +5,16 @@ USER_NAME=$(whoami)
 DOCKER_TOMCAT9="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/web-app"
 WAR_NAME="WebApp.war"
 
+case "$USER_NAME" in
+  "joao-vitor")
+DOCKER_TOMCAT9="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
+    ;;
+  "admin")
+DOCKER_TOMCAT9="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
+    ;;
+esac
+
+
 # Entrar no diretório do projeto
  case "$USER_NAME" in
   "joao-vitor")
