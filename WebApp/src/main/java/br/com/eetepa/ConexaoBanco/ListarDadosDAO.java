@@ -21,8 +21,8 @@ public class ListarDadosDAO {
     List<Map<String, Object>> estacoes = new ArrayList<>();
     List<Map<String, Object>> irrigadores = new ArrayList<>();
 
-    String sqlEstacoes = "SELECT * FROM estacoes;";
-    String sqlIrrigadores = "SELECT * FROM irrigadores;";
+    String sqlEstacoes = "SELECT data_hora, nome, id FROM estacoes;";
+    String sqlIrrigadores = "SELECT id, id_estacao, plantio, acao_atual FROM irrigadores;";
 
     // Estacoes
     try (
@@ -55,6 +55,7 @@ public class ListarDadosDAO {
         Map<String, Object> item = new HashMap<>();
         item.put("id", result.getInt("id"));
         item.put("plantio", result.getString("plantio"));
+        item.put("acao_atual", result.getString("acao_atual"));
         item.put("id_estacao", result.getString("id_estacao"));
         irrigadores.add(item);
       }

@@ -13,7 +13,7 @@ public class IrrigadorDAO {
   private EstacaoManager manager = new EstacaoManager();
 
   public void inserirDadosIrrigador(Irrigador irrigador) throws SQLException {
-    String sql = "INSERT INTO irrigadores (id_estacao, plantio, umidadeSolo, acaoAtual, tempoRestante, cicloDias, limiarUmidade, nome_estacao) VALUES (?,?,?,?,?,?,?,?);";
+    String sql = "INSERT INTO irrigadores (id_estacao, plantio, umidade_solo, acao_atual, tempo_restante, ciclo_dias, limiar_umidade, nome_estacao) VALUES (?,?,?,?,?,?,?,?);";
 
     try (Connection conn = new ConexaoMysql().getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);) {
