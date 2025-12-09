@@ -19,11 +19,11 @@ CREATE TABLE irrigadores (
     plantio        VARCHAR(32) NOT NULL,
     id_estacao     VARCHAR(32) NOT NULL,
     nome_estacao VARCHAR(32) NOT NULL,
-    umidadeSolo    DECIMAL(5,2),
-    acaoAtual      ENUM('ligado','desligado'),
-    tempoRestante  INT,
-    cicloDias      INT,
-    limiarUmidade  INT,
+    umidade_solo    DECIMAL(5,2),
+    acao_atual      ENUM('ligado','desligado'),
+    tempo_restante  INT,
+    ciclo_dias INT,
+    limiar_umidade  INT,
     INDEX (id_estacao),
     FOREIGN KEY (id_estacao) REFERENCES estacoes(id)
 );
