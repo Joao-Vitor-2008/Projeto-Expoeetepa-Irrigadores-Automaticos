@@ -20,7 +20,7 @@ public class IrrigadorManager {
       irrigador.setAcaoAtual("ligado");
       return "ligar";
     } else {
-      return "desligado";
+      return "desligar";
     }
   }
 
