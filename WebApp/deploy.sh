@@ -1,31 +1,18 @@
+
 #!/bin/zsh
+set -e
 
 # Configurações
 USER_NAME=$(whoami)
-DOCKER_TOMCAT9="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/web-app"
 WAR_NAME="WebApp.war"
 
+# Diretórios por usuário
 case "$USER_NAME" in
   "joao-vitor")
-DOCKER_TOMCAT9="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
+    BASE_DIR="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos"
     ;;
   "admin")
-DOCKER_TOMCAT9="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
-    ;;
-esac
-
-
-# Entrar no diretório do projeto
- case "$USER_NAME" in
-  "joao-vitor")
-    PROJETO_DIR="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/WebApp/"
-    echo "Olá "$USER_NAME"!"
-    cd $PROJETO_DIR
-    ;;
-  "admin")
-    PROJETO_DIR="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/WebApp"
-    echo "Olá "$USER_NAME"!"
-    cd $PROJETO_DIR
+    BASE_DIR="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos"
     ;;
   *)
     echo "Usuário não reconhecido: $USER_NAME"
@@ -33,25 +20,32 @@ esac
     ;;
 esac
 
+DOCKER_TOMCAT9="$BASE_DIR/docker-data/arduino-app"
+PROJETO_DIR="$BASE_DIR/WebApp"
+
+echo "Olá $USER_NAME!"
+cd "$PROJETO_DIR"
 
 # Compilar o projeto
-mvn -q clean package || {
+echo "Compilando o projeto..."
+if ! mvn -q clean package; then
   echo "Falha na compilação!"
   exit 1
-}
+fi
 
-# Copiar o .war para o Docker
-  sudo cp "target/$WAR_NAME" "$DOCKER_TOMCAT9/" || {
+# Copiar o .war
+echo "Copiando WAR..."
+sudo cp "target/$WAR_NAME" "$DOCKER_TOMCAT9/" || {
   echo "Falha ao copiar o WAR!"
   exit 1
 }
-echo "War copiado com sucesso"
+echo "WAR copiado com sucesso."
 
-sudo systemctl restart tomcat9 || echo "Erro ao recarregar o tomcat"
-
-sudo systemctl restart mariadb || echo "Erro ao reiniciar o MySQL"
-
-sleep 3
+# Reiniciar serviços
+echo "Reiniciando serviços..."
+sudo systemctl restart tomcat9 || echo "Erro ao reiniciar o Tomcat"
+sudo systemctl restart mariadb || echo "Erro ao reiniciar o MariaDB"
 
 echo ""
 echo "Deploy concluído com sucesso!"
+

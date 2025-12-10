@@ -1,29 +1,17 @@
 #!/bin/zsh
+set -e  # Encerra o script se qualquer comando falhar
 
 # Configurações
 USER_NAME=$(whoami)
 WAR_NAME="ArduinoApp.war"
 
+# Diretórios por usuário
 case "$USER_NAME" in
   "joao-vitor")
-DOCKER_TOMCAT9="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
+    BASE_DIR="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos"
     ;;
   "admin")
-DOCKER_TOMCAT9="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/arduino-app/"
-    ;;
-esac
-
-# Entrar no diretório do projeto
- case "$USER_NAME" in
-  "joao-vitor")
-    PROJETO_DIR="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/ArduinoApp/"
-    echo "Olá "$USER_NAME"!"
-    cd $PROJETO_DIR
-    ;;
-  "admin")
-    PROJETO_DIR="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/ArduinoApp"
-    echo "Olá "$USER_NAME"!"
-    cd $PROJETO_DIR
+    BASE_DIR="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos"
     ;;
   *)
     echo "Usuário não reconhecido: $USER_NAME"
@@ -31,27 +19,38 @@ esac
     ;;
 esac
 
+DOCKER_TOMCAT9="$BASE_DIR/docker-data/arduino-app"
+PROJETO_DIR="$BASE_DIR/ArduinoApp"
+
+echo "Olá $USER_NAME!"
+cd "$PROJETO_DIR"
 
 # Compilar o projeto
-mvn -q clean package || {
+echo "Compilando o projeto..."
+if ! mvn -q clean package; then
   echo "Falha na compilação!"
   exit 1
-}
+fi
 
 # Copiar o .war para o Tomcat
+echo "Copiando WAR..."
 sudo cp "target/$WAR_NAME" "$DOCKER_TOMCAT9/" || {
   echo "Falha ao copiar o WAR!"
   exit 1
 }
-echo "War copiado com sucesso"
+echo "WAR copiado com sucesso."
 
-sudo systemctl restart tomcat9 || echo "Erro ao recarregar o tomcat"
-
-sudo systemctl restart mariadb || echo "Erro ao reiniciar o MySQL"
+# Reiniciar serviços
+echo "Reiniciando serviços..."
+sudo systemctl restart tomcat9 || echo "Erro ao reiniciar o Tomcat"
+sudo systemctl restart mariadb || echo "Erro ao reiniciar o MariaDB"
 
 sleep 3
-# Testar o codigo automaticamente
-curl -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
+
+# Testar endpoints
+echo "Testando API..."
+
+curl -s -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "Skymetric",
@@ -60,19 +59,20 @@ curl -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
     "pressaoAr": 1012,
     "indice_uv": 3
   }'
+echo ""
 
- curl -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
+curl -s -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
   -H "Content-Type: application/json" \
   -d '{
     "plantio": "cebolinha",
     "nome_estacao": "Skymetric",
     "umidadeSolo": 40.5,
     "acaoAtual": "desligado",
-    "tempoRestante":0,
+    "tempoRestante": 0,
     "cicloDias": 3,
     "limiarUmidade": 50,
     "comando": "desligar"
   }'
-
 echo ""
+
 echo "Deploy concluído com sucesso!"

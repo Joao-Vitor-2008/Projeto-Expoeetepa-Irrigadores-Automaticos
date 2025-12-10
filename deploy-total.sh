@@ -1,24 +1,32 @@
 #!/bin/zsh
-./WebApp/deploy.sh || echo "Erro Ao executar o deploy do WebApp"
+set -e
 
-./ArduinoApp/deploy.sh || echo "Erro Ao executar o deploy do ArduinoApp"
+# Executar deploys individuais
+./WebApp/deploy.sh || echo "Erro ao executar o deploy do WebApp"
+./ArduinoApp/deploy.sh || echo "Erro ao executar o deploy do ArduinoApp"
 
 USER_NAME=$(whoami)
 
-cd /home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/
-
+# Selecionar diretório do docker conforme o usuário
 case "$USER_NAME" in
   "joao-vitor")
-cd /home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/
+    DOCKER_DIR="/home/joao-vitor/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data"
     ;;
   "admin")
-cd /home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data/
+    DOCKER_DIR="/home/admin/git/Projeto-Expoeetepa-Irrigadores-Automaticos/docker-data"
+    ;;
+  *)
+    echo "Usuário não reconhecido: $USER_NAME"
+    exit 1
     ;;
 esac
 
+cd "$DOCKER_DIR"
 
+# Reiniciar containers
+echo "Reiniciando containers..."
 sudo docker compose down
-
-sleep 3
-
+sleep 2
 sudo docker compose up -d
+
+echo "Ambiente Docker reiniciado com sucesso!"
