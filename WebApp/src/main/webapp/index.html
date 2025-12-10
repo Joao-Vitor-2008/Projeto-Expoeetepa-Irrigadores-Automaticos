@@ -1,14 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link href="css/style.css" rel="stylesheet">
+  <title>Sistema de Irrigação</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #9c9595;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #e90a0a;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.93);
+      margin: 15px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+  </style>
 </head>
 
 <body>
+
+  <h1>Estações</h1>
+
+  <div class="card">
+    <h3>Temperatura (°C)</h3>
+    <canvas id="graficoTemp"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Umidade (%)</h3>
+    <canvas id="graficoUmidade"></canvas>
+  </div>
+
+  <div class="card">
+    <button onclick="carregarDados()">Atualizar Dados</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <canvas id="graficoTemp"></canvas>
+  <canvas id="graficoUmidade"></canvas>
+
+  <script>
+    const ctxTemp = document.getElementById('graficoTemp').getContext('2d');
+    const ctxUmidade = document.getElementById('graficoUmidade').getContext('2d');
+
+    const graficoTemp = new Chart(ctxTemp, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Temperatura (°C)',
+          data: [],
+          borderWidth: 2,
+          tension: 0.3
+        }]
+      }
+    });
+
+    const graficoUmidade = new Chart(ctxUmidade, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Umidade (%)',
+          data: [],
+          borderWidth: 2,
+          tension: 0.3
+        }]
+      }
+    });
+
+    function carregarDados() {
+      fetch('/SEU_PROJETO/dashboard')
+        .then(resp => resp.json())
+        .then(json => {
+
+          const estacoes = json.estacoes;
+
+          const nomes = [];
+          const temperaturas = [];
+          const umidades = [];
+
+          estacoes.forEach(e => {
+            nomes.push(e.nome);
+            temperaturas.push(e.temperaturaAr);
+            umidades.push(e.umidadeAr);
+          });
+
+          graficoTemp.data.labels = nomes;
+          graficoTemp.data.datasets[0].data = temperaturas;
+          graficoTemp.update();
+
+          graficoUmidade.data.labels = nomes;
+          graficoUmidade.data.datasets[0].data = umidades;
+          graficoUmidade.update();
+        })
+        .catch(err => console.error('Erro ao carregar dados:', err));
+    }
+
+    window.onload = carregarDados;
+  </script>
+
 
 </body>
 
