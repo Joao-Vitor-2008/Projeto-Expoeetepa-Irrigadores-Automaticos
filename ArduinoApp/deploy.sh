@@ -51,7 +51,7 @@ sudo systemctl restart mariadb || echo "Erro ao reiniciar o MySQL"
 
 sleep 3
 # Testar o codigo automaticamente
-curl -X POST http://localhost:8081/ArduinoApp/estacao \
+curl -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "Skymetric",
@@ -61,7 +61,7 @@ curl -X POST http://localhost:8081/ArduinoApp/estacao \
     "indice_uv": 3
   }'
 
- curl -X POST http://localhost:8081/ArduinoApp/irrigador \
+ curl -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
   -H "Content-Type: application/json" \
   -d '{
     "plantio": "cebolinha",
