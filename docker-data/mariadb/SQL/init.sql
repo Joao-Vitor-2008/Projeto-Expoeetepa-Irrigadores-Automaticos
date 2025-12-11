@@ -10,8 +10,7 @@ CREATE TABLE estacoes (
     nome VARCHAR(32) NOT NULL,
     temperaturaAr DECIMAL(5,2) NOT NULL,
     umidadeAr DECIMAL(5,2) NOT NULL,
-    pressaoAr DECIMAL(6,2) NOT NULL,
-    indice_uv INT NOT NULL
+    pressaoAr DECIMAL(6,2) NOT NULL
 );
 
 CREATE TABLE irrigadores (
