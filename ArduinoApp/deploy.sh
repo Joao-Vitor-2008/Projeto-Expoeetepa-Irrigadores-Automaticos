@@ -50,7 +50,7 @@ sleep 3
 # Testar endpoints
 echo "Testando API..."
 
-curl -s -X POST http://localhost:8081/ArduinoApp/estacao \
+curl -s -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "Skymetric",
@@ -60,7 +60,7 @@ curl -s -X POST http://localhost:8081/ArduinoApp/estacao \
   }'
 echo ""
 
-curl -s -X POST http://localhost:8081/ArduinoApp/irrigador \
+curl -s -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
   -H "Content-Type: application/json" \
   -d '{
     "plantio": "cebolinha",
