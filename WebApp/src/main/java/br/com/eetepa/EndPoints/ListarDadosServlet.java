@@ -30,10 +30,8 @@ public class ListarDadosServlet extends HttpServlet {
     } catch (Exception e) {
       response.setStatus(500);
 
-      // Monta um único JSON válido contendo mensagem e stacktrace
       Map<String, Object> erro = new HashMap<>();
       erro.put("erro", e.getMessage());
-      erro.put("stacktrace", e.getStackTrace());
 
       String jsonErro = gson.toJson(erro);
       response.getWriter().write(jsonErro);

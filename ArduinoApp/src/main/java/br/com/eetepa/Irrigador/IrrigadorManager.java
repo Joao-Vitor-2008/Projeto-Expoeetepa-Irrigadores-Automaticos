@@ -11,11 +11,11 @@ public class IrrigadorManager {
   private EstacaoManager manager = new EstacaoManager();
 
   public String getComando(Irrigador irrigador) {
-    if (irrigador.getPlantio().equals("cebolinha") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
+    if (irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
         && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 30) {
       irrigador.setAcaoAtual("ligado");
       return "ligar";
-    } else if (irrigador.getPlantio().equals("outros") && irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
+    } else if (irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
         && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 28) {
       irrigador.setAcaoAtual("ligado");
       return "ligar";
