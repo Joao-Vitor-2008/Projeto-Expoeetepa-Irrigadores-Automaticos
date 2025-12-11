@@ -4,6 +4,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.google.gson.Gson;
 
@@ -27,7 +29,14 @@ public class ListarDadosServlet extends HttpServlet {
 
     } catch (Exception e) {
       response.setStatus(500);
-      response.getWriter().write("{\"erro\": \"" + e.getMessage() + "\"}");
+
+      // Monta um único JSON válido contendo mensagem e stacktrace
+      Map<String, Object> erro = new HashMap<>();
+      erro.put("erro", e.getMessage());
+      erro.put("stacktrace", e.getStackTrace());
+
+      String jsonErro = gson.toJson(erro);
+      response.getWriter().write(jsonErro);
     }
   }
 }
