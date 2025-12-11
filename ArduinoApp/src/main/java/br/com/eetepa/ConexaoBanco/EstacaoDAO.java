@@ -8,7 +8,7 @@ import br.com.eetepa.Estacao.Estacao;
 public class EstacaoDAO {
 
   public void inserirDadosEstacao(Estacao estacao) throws SQLException {
-    String sql = ("INSERT INTO estacoes (id, data_hora, nome, temperaturaAr, umidadeAr, pressaoAr, indice_uv) VALUES (?,?,?,?,?,?,?);");
+    String sql = ("INSERT INTO estacoes (id, data_hora, nome, temperaturaAr, umidadeAr, pressaoAr) VALUES (?,?,?,?,?,?);");
 
     try (
         Connection conn = new ConexaoMysql().getConnection();
@@ -20,7 +20,6 @@ public class EstacaoDAO {
       stmt.setDouble(4, estacao.getTemperaturaAr());
       stmt.setDouble(5, estacao.getUmidadeAr());
       stmt.setInt(6, estacao.getPressaoAr());
-      stmt.setInt(7, estacao.getIndice_uv());
 
       stmt.executeUpdate();
     } catch (SQLException e) {

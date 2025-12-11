@@ -10,11 +10,11 @@ public class Estacao {
   private double temperaturaAr;
   private double umidadeAr;
   private int pressaoAr;
-  private int indice_uv;
-  private Timestamp data_hora = new java.sql.Timestamp(System.currentTimeMillis());
+  private Timestamp data_hora;
 
   // Construtor para gerar o id com UUID
   public Estacao() {
+    data_hora = new java.sql.Timestamp(System.currentTimeMillis());
     id = UUID.randomUUID().toString().replace("-", "");
   }
 
@@ -52,14 +52,6 @@ public class Estacao {
 
   public void setPressaoAr(int pressaoAr) {
     this.pressaoAr = pressaoAr;
-  }
-
-  public int getIndice_uv() {
-    return indice_uv;
-  }
-
-  public void setIndice_uv(int indice_uv) {
-    this.indice_uv = indice_uv;
   }
 
   public Timestamp getData_hora() {
