@@ -24,20 +24,13 @@ public class ConexaoMysql {
     config.setUsername(USER);
     config.setPassword(PASSWORD);
     config.setDriverClassName(DRIVER);
+    config.setMaximumPoolSize(5);
+    config.setMinimumIdle(1);
+    config.setIdleTimeout(600000);
     ds = new HikariDataSource(config);
   }
 
   public Connection getConnection() throws SQLException {
-    try {
-      if (ds.getConnection() != null && !ds.getConnection().isClosed()) {
-        return ds.getConnection();
-      }
-
-      return ds.getConnection();
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
     return ds.getConnection();
   }
 }
