@@ -11,7 +11,7 @@ public class EstacaoDAO {
     String sql = ("INSERT INTO estacoes (id, data_hora, nome, temperaturaAr, umidadeAr, pressaoAr) VALUES (?,?,?,?,?,?);");
 
     try (
-        Connection conn = new ConexaoMysql().getConnection();
+        Connection conn = ConexaoMysql.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);) {
 
       stmt.setString(1, estacao.getId());

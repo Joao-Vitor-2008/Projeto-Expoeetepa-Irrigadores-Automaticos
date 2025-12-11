@@ -24,7 +24,7 @@ public class ListarDadosDAO {
     String sqlEstacoes = "SELECT data_hora, nome, id FROM estacoes;";
     String sqlIrrigadores = "SELECT id, id_estacao, plantio, acao_atual FROM irrigadores;";
 
-    try (Connection conn = new ConexaoMysql().getConnection()) {
+    try (Connection conn = ConexaoMysql.getConnection()) {
       // Try da Estaçâo
       try (
           PreparedStatement sttm = conn.prepareStatement(sqlEstacoes);
