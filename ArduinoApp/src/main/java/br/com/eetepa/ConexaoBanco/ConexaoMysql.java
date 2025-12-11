@@ -8,7 +8,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class ConexaoMysql {
-
   private static final Dotenv dotenv = Dotenv.configure().filename("dados.env").load();
 
   private static String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -30,7 +29,10 @@ public class ConexaoMysql {
     ds = new HikariDataSource(config);
   }
 
-  public Connection getConnection() throws SQLException {
+  private ConexaoMysql() {
+  }
+
+  public static Connection getConnection() throws SQLException {
     return ds.getConnection();
   }
 }
