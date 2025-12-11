@@ -50,18 +50,17 @@ sleep 3
 # Testar endpoints
 echo "Testando API..."
 
-curl -s -X POST http://10.0.0.101:8081/ArduinoApp/estacao \
+curl -s -X POST http://localhost:8081/ArduinoApp/estacao \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "Skymetric",
     "temperaturaAr": 32.5,
     "umidadeAr": 78.9,
-    "pressaoAr": 1012,
-    "indice_uv": 3
+    "pressaoAr": 1012
   }'
 echo ""
 
-curl -s -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
+curl -s -X POST http://localhost:8081/ArduinoApp/irrigador \
   -H "Content-Type: application/json" \
   -d '{
     "plantio": "cebolinha",
@@ -70,8 +69,7 @@ curl -s -X POST http://10.0.0.101:8081/ArduinoApp/irrigador \
     "acaoAtual": "desligado",
     "tempoRestante": 0,
     "cicloDias": 3,
-    "limiarUmidade": 50,
-    "comando": "desligar"
+    "limiarUmidade": 50
   }'
 echo ""
 
