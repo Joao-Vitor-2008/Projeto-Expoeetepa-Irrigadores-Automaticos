@@ -1,125 +1,201 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
+<!doctype html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Sistema de Irrigação</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monitoramento de Umidade e Temperatura</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #9c9595;
-      padding: 20px;
-      text-align: center;
+    :root{
+      --bg:#ffffff; 
+      --title:#000000;
+      --temp-color:#000000; 
+      --hum-color:#000000;  
+      --card-bg:transparent;
+      --font-sans: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:var(--font-sans);
+      background:var(--bg);
+      padding:32px;
     }
 
-    h1 {
-      color: #ffffff;
-      margin-bottom: 20px;
+    .container{
+      width:900px;
+      max-width:96vw;
+      background:var(--card-bg);
+      border-radius:12px;
+      padding:26px 30px;
+      box-shadow: 0 6px 18px rgba(20,30,40,0.06);
     }
 
-    .card {
-      background: #e90a0a;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.93);
-      margin: 15px auto;
-      width: 90%;
-      max-width: 800px;
+    header{
+      text-align:center;
+      margin-bottom:18px;
     }
 
-    canvas {
-      max-width: 100%;
+    h1{
+      margin:6px 0 0;
+      font-size:30px;
+      color:var(--title);
+      letter-spacing:0.2px;
+      font-weight:700;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px 30px;
+      align-items:center;
+      padding:10px 12px;
+    }
+
+    .panel{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:18px 8px;
+      min-height:180px;
+    }
+
+    .icon{
+      width:84px;
+      height:84px;
+      margin-bottom:8px;
+    }
+
+    .label{
+      font-size:22px;
+      color:#222;
+      font-weight:700;
+      margin-top:6px;
+    }
+
+    .value{
+      margin-top:12px;
+      font-weight:700;
+      font-size:72px;
+      line-height:1;
+    }
+
+    .value .unit{
+      font-size:28px;
+      font-weight:600;
+      vertical-align:top;
+      margin-left:6px;
+      color:#000000;
+    }
+
+    .temp .value{ color:var(--temp-color); }
+    .hum  .value{ color:var(--hum-color); }
+
+    @media (max-width:640px){
+      .grid{grid-template-columns:1fr;}
+      .value{font-size:56px}
     }
   </style>
 </head>
 
 <body>
+  <div class="container" role="region" aria-label="Monitoramento de Umidade e Temperatura">
+    <header>
+      <h1>Monitoramento SmartDrizzele 2.0</h1>
+    </header>
 
-  <h1>Estações</h1>
+    <main class="grid">
+      <section class="panel temp" aria-labelledby="tempLabel">
+        <img class="icon" src="imagem/temperatura.png" alt="temperatura.png" />
+        <div id="tempLabel" class="label">Temperatura:</div>
+        <div id="tempValue" class="value">21.4<span class="unit">&deg;C</span></div>
+      </section>
 
-  <div class="card">
-    <h3>Temperatura (°C)</h3>
-    <canvas id="graficoTemp"></canvas>
+      <section class="panel hum" aria-labelledby="humLabel">
+        <img class="icon" src="imagem/umidade (1).png" alt="Ícone Umidade" />
+        <div id="humLabel" class="label">Umidade:</div>
+        <div id="humValue" class="value">68.0<span class="unit">%</span></div>
+      </section>
+    </main>
+
+    <!-- ligar ou desligar  -->
+    <div id="statusContainer" style="text-align:center; margin-top:30px;">
+      <h2 style="font-size:26px; color:#000;">Status da Irrigação:</h2>
+      <div id="statusIrrigacao" style="font-size:38px; font-weight:700; color:green;">
+        DESLIGADA
+      </div>
+    </div>
+
   </div>
-
-  <div class="card">
-    <h3>Umidade (%)</h3>
-    <canvas id="graficoUmidade"></canvas>
-  </div>
-
-  <div class="card">
-    <button onclick="carregarDados()">Atualizar Dados</button>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <canvas id="graficoTemp"></canvas>
-  <canvas id="graficoUmidade"></canvas>
 
   <script>
-    const ctxTemp = document.getElementById('graficoTemp').getContext('2d');
-    const ctxUmidade = document.getElementById('graficoUmidade').getContext('2d');
-
-    const graficoTemp = new Chart(ctxTemp, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Temperatura (°C)',
-          data: [],
-          borderWidth: 2,
-          tension: 0.3
-        }]
-      }
-    });
-
-    const graficoUmidade = new Chart(ctxUmidade, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Umidade (%)',
-          data: [],
-          borderWidth: 2,
-          tension: 0.3
-        }]
-      }
-    });
-
-    function carregarDados() {
-      fetch('/SEU_PROJETO/dashboard')
-        .then(resp => resp.json())
-        .then(json => {
-
-          const estacoes = json.estacoes;
-
-          const nomes = [];
-          const temperaturas = [];
-          const umidades = [];
-
-          estacoes.forEach(e => {
-            nomes.push(e.nome);
-            temperaturas.push(e.temperaturaAr);
-            umidades.push(e.umidadeAr);
-          });
-
-          graficoTemp.data.labels = nomes;
-          graficoTemp.data.datasets[0].data = temperaturas;
-          graficoTemp.update();
-
-          graficoUmidade.data.labels = nomes;
-          graficoUmidade.data.datasets[0].data = umidades;
-          graficoUmidade.update();
-        })
-        .catch(err => console.error('Erro ao carregar dados:', err));
+    function atualizarLeituras(temp, umid){
+      const tv = document.getElementById('tempValue');
+      const hv = document.getElementById('humValue');
+      if(tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
+      if(hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
     }
 
-    window.onload = carregarDados;
+    function atualizarStatus(estado){
+      const s = document.getElementById("statusIrrigacao");
+
+      if(estado === "on"){
+        s.textContent = "IRRIGANDO";
+        s.style.color = "blue";
+      } else {
+        s.textContent = "DESLIGADA";
+        s.style.color = "green";
+      }
+    }
+
+  function atualizarLeituras(temp, umid){
+    const tv = document.getElementById('tempValue');
+    const hv = document.getElementById('humValue');
+    if(tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
+    if(hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
+  }
+
+  function atualizarStatus(estado){
+    const s = document.getElementById("statusIrrigacao");
+    if(estado === "on"){
+      s.textContent = "IRRIGANDO";
+      s.style.color = "blue";
+    } else {
+      s.textContent = "DESLIGADA";
+      s.style.color = "green";
+    }
+  }
+
+  async function carregarDados(){
+    try {
+      const resp = await fetch("/dashboard");
+      const dados = await resp.json();
+
+    
+      const estacao = dados.estacoes[0];
+      if(estacao){
+        atualizarLeituras(estacao.temperatura, estacao.umidade);
+      }
+
+      const irrigador = dados.irrigadores[0];
+      if(irrigador){
+        atualizarStatus(irrigador.estado);
+      }
+
+    } catch (err) {
+      console.error("Erro ao buscar dados:", err);
+    }
+  }
+
+  
+  setInterval(carregarDados, 5000);
+  carregarDados();
+
   </script>
-
-
 </body>
-
 </html>
