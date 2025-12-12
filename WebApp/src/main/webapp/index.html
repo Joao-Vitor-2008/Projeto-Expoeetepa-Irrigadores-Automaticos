@@ -1,201 +1,409 @@
 <!doctype html>
+
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="utf-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Monitoramento de Umidade e Temperatura</title>
 
+
+
   <style>
-    :root{
-      --bg:#ffffff; 
-      --title:#000000;
-      --temp-color:#000000; 
-      --hum-color:#000000;  
-      --card-bg:transparent;
+    :root {
+
+      --bg: #ffffff;
+
+      --title: #000000;
+
+      --temp-color: #000000;
+
+      --hum-color: #000000;
+
+      --card-bg: transparent;
+
       --font-sans: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:var(--font-sans);
-      background:var(--bg);
-      padding:32px;
+
     }
 
-    .container{
-      width:900px;
-      max-width:96vw;
-      background:var(--card-bg);
-      border-radius:12px;
-      padding:26px 30px;
-      box-shadow: 0 6px 18px rgba(20,30,40,0.06);
+    * {
+      box-sizing: border-box
     }
 
-    header{
-      text-align:center;
-      margin-bottom:18px;
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-family: var(--font-sans);
+
+      background: var(--bg);
+
+      padding: 32px;
+
     }
 
-    h1{
-      margin:6px 0 0;
-      font-size:30px;
-      color:var(--title);
-      letter-spacing:0.2px;
-      font-weight:700;
+
+
+    .container {
+
+      width: 900px;
+
+      max-width: 96vw;
+
+      background: var(--card-bg);
+
+      border-radius: 12px;
+
+      padding: 26px 30px;
+
+      box-shadow: 0 6px 18px rgba(20, 30, 40, 0.06);
+
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px 30px;
-      align-items:center;
-      padding:10px 12px;
+
+
+    header {
+
+      text-align: center;
+
+      margin-bottom: 18px;
+
     }
 
-    .panel{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      padding:18px 8px;
-      min-height:180px;
+
+
+    h1 {
+
+      margin: 6px 0 0;
+
+      font-size: 30px;
+
+      color: var(--title);
+
+      letter-spacing: 0.2px;
+
+      font-weight: 700;
+
     }
 
-    .icon{
-      width:84px;
-      height:84px;
-      margin-bottom:8px;
+
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px 30px;
+
+      align-items: center;
+
+      padding: 10px 12px;
+
     }
 
-    .label{
-      font-size:22px;
-      color:#222;
-      font-weight:700;
-      margin-top:6px;
+
+
+    .panel {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 18px 8px;
+
+      min-height: 180px;
+
     }
 
-    .value{
-      margin-top:12px;
-      font-weight:700;
-      font-size:72px;
-      line-height:1;
+
+
+    .icon {
+
+      width: 84px;
+
+      height: 84px;
+
+      margin-bottom: 8px;
+
     }
 
-    .value .unit{
-      font-size:28px;
-      font-weight:600;
-      vertical-align:top;
-      margin-left:6px;
-      color:#000000;
+
+
+    .label {
+
+      font-size: 22px;
+
+      color: #222;
+
+      font-weight: 700;
+
+      margin-top: 6px;
+
     }
 
-    .temp .value{ color:var(--temp-color); }
-    .hum  .value{ color:var(--hum-color); }
 
-    @media (max-width:640px){
-      .grid{grid-template-columns:1fr;}
-      .value{font-size:56px}
+
+    .value {
+
+      margin-top: 12px;
+
+      font-weight: 700;
+
+      font-size: 72px;
+
+      line-height: 1;
+
+    }
+
+
+
+    .value .unit {
+
+      font-size: 28px;
+
+      font-weight: 600;
+
+      vertical-align: top;
+
+      margin-left: 6px;
+
+      color: #000000;
+
+    }
+
+
+
+    .temp .value {
+      color: var(--temp-color);
+    }
+
+    .hum .value {
+      color: var(--hum-color);
+    }
+
+
+
+    @media (max-width:640px) {
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .value {
+        font-size: 56px
+      }
+
     }
   </style>
+
 </head>
 
+
+
 <body>
+
   <div class="container" role="region" aria-label="Monitoramento de Umidade e Temperatura">
+
     <header>
+
       <h1>Monitoramento SmartDrizzele 2.0</h1>
+
     </header>
 
+
+
     <main class="grid">
+
       <section class="panel temp" aria-labelledby="tempLabel">
+
         <img class="icon" src="imagem/temperatura.png" alt="temperatura.png" />
+
         <div id="tempLabel" class="label">Temperatura:</div>
+
         <div id="tempValue" class="value">21.4<span class="unit">&deg;C</span></div>
+
       </section>
+
+
 
       <section class="panel hum" aria-labelledby="humLabel">
+
         <img class="icon" src="imagem/umidade (1).png" alt="Ícone Umidade" />
+
         <div id="humLabel" class="label">Umidade:</div>
+
         <div id="humValue" class="value">68.0<span class="unit">%</span></div>
+
       </section>
+
     </main>
 
+
+
     <!-- ligar ou desligar  -->
+
     <div id="statusContainer" style="text-align:center; margin-top:30px;">
+
       <h2 style="font-size:26px; color:#000;">Status da Irrigação:</h2>
+
       <div id="statusIrrigacao" style="font-size:38px; font-weight:700; color:green;">
+
         DESLIGADA
+
       </div>
+
     </div>
+
+
 
   </div>
 
+
+
   <script>
-    function atualizarLeituras(temp, umid){
+
+    function atualizarLeituras(temp, umid) {
+
       const tv = document.getElementById('tempValue');
+
       const hv = document.getElementById('humValue');
-      if(tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
-      if(hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
+
+      if (tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
+
+      if (hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
+
     }
 
-    function atualizarStatus(estado){
+
+
+    function atualizarStatus(estado) {
+
       const s = document.getElementById("statusIrrigacao");
 
-      if(estado === "on"){
+
+
+      if (estado === "on") {
+
         s.textContent = "IRRIGANDO";
+
         s.style.color = "blue";
+
       } else {
+
         s.textContent = "DESLIGADA";
+
         s.style.color = "green";
-      }
-    }
 
-  function atualizarLeituras(temp, umid){
-    const tv = document.getElementById('tempValue');
-    const hv = document.getElementById('humValue');
-    if(tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
-    if(hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
-  }
-
-  function atualizarStatus(estado){
-    const s = document.getElementById("statusIrrigacao");
-    if(estado === "on"){
-      s.textContent = "IRRIGANDO";
-      s.style.color = "blue";
-    } else {
-      s.textContent = "DESLIGADA";
-      s.style.color = "green";
-    }
-  }
-
-  async function carregarDados(){
-    try {
-      const resp = await fetch("/dashboard");
-      const dados = await resp.json();
-
-    
-      const estacao = dados.estacoes[0];
-      if(estacao){
-        atualizarLeituras(estacao.temperatura, estacao.umidade);
       }
 
-      const irrigador = dados.irrigadores[0];
-      if(irrigador){
-        atualizarStatus(irrigador.estado);
+    }
+
+
+
+    function atualizarLeituras(temp, umid) {
+
+      const tv = document.getElementById('tempValue');
+
+      const hv = document.getElementById('humValue');
+
+      if (tv) tv.innerHTML = Number(temp).toFixed(1) + '<span class="unit">&deg;C</span>';
+
+      if (hv) hv.innerHTML = Number(umid).toFixed(1) + '<span class="unit">%</span>';
+
+    }
+
+
+
+    function atualizarStatus(estado) {
+
+      const s = document.getElementById("statusIrrigacao");
+
+      if (estado === "on") {
+
+        s.textContent = "IRRIGANDO";
+
+        s.style.color = "blue";
+
+      } else {
+
+        s.textContent = "DESLIGADA";
+
+        s.style.color = "green";
+
       }
 
-    } catch (err) {
-      console.error("Erro ao buscar dados:", err);
     }
-  }
 
-  
-  setInterval(carregarDados, 5000);
-  carregarDados();
+
+
+    async function carregarDados() {
+
+      try {
+
+        const resp = await fetch("/dashboard");
+
+        const dados = await resp.json();
+
+
+
+
+
+        const estacao = dados.estacoes[0];
+
+        if (estacao) {
+
+          atualizarLeituras(estacao.temperatura, estacao.umidade);
+
+        }
+
+
+
+        const irrigador = dados.irrigadores[0];
+
+        if (irrigador) {
+
+          atualizarStatus(irrigador.estado);
+
+        }
+
+
+
+      } catch (err) {
+
+        console.error("Erro ao buscar dados:", err);
+
+      }
+
+    }
+
+
+
+
+
+    setInterval(carregarDados, 5000);
+
+    carregarDados();
+
+
 
   </script>
+
 </body>
+
 </html>
