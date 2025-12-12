@@ -38,7 +38,7 @@ public class ListarDadosDAO {
 
   private void carregarEstacoes(Connection conn, List<Map<String, Object>> estacoes) throws SQLException {
 
-    final String sql = "SELECT data_hora, nome, id FROM estacoes ORDER BY data_hora DESC LIMIT 10;";
+    final String sql = "SELECT * FROM estacoes ORDER BY data_hora DESC LIMIT 10;";
 
     try (PreparedStatement sttm = conn.prepareStatement(sql);
         ResultSet rs = sttm.executeQuery()) {
@@ -66,7 +66,7 @@ public class ListarDadosDAO {
 
   private void carregarIrrigadores(Connection conn, List<Map<String, Object>> irrigadores) throws SQLException {
 
-    final String sql = "SELECT id, id_estacao, plantio, acao_atual FROM irrigadores ORDER BY id DESC LIMIT 10;";
+    final String sql = "SELECT * FROM irrigadores ORDER BY id DESC LIMIT 10;";
 
     try (PreparedStatement sttm = conn.prepareStatement(sql);
         ResultSet rs = sttm.executeQuery()) {
