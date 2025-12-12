@@ -27,6 +27,6 @@ cd "$DOCKER_DIR"
 echo "Reiniciando containers..."
 sudo docker compose down
 sleep 2
-sudo docker compose up -d
+sudo docker compose up -d --build
 
 echo "Ambiente Docker reiniciado com sucesso!"

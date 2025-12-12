@@ -15,11 +15,8 @@ public class IrrigadorManager {
         && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 30) {
       irrigador.setAcaoAtual("ligado");
       return "ligar";
-    } else if (irrigador.getUmidadeSolo() < irrigador.getLimiarUmidade()
-        && manager.getEstacao(irrigador.getNome_estacao()).getTemperaturaAr() > 28) {
-      irrigador.setAcaoAtual("ligado");
-      return "ligar";
     } else {
+      irrigador.setAcaoAtual("desligado");
       return "desligar";
     }
   }

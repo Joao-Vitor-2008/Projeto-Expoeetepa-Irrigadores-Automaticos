@@ -1,76 +1,89 @@
 package br.com.eetepa.ConexaoBanco;
 
 import java.sql.Timestamp;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ListarDadosDAO {
 
-  ZoneId zonaBr = ZoneId.of("America/Santarem");
+  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
   public Map<String, Object> listarDados() throws SQLException {
 
     List<Map<String, Object>> estacoes = new ArrayList<>();
     List<Map<String, Object>> irrigadores = new ArrayList<>();
 
-    String sqlEstacoes = "SELECT data_hora, nome, id FROM estacoes;";
-    String sqlIrrigadores = "SELECT id, id_estacao, plantio, acao_atual FROM irrigadores;";
-
     try (Connection conn = ConexaoMysql.getConnection()) {
-      // Try da Estaçâo
-      try (
-          PreparedStatement sttm = conn.prepareStatement(sqlEstacoes);
-          ResultSet result = sttm.executeQuery()) {
 
-        while (result.next()) {
-          Map<String, Object> item = new HashMap<>();
-          item.put("id", result.getString("id"));
-          item.put("nome", result.getString("nome"));
-          Timestamp ts = result.getTimestamp("data_hora");
-          String data_hora = ts == null ? null
-              : ts.toInstant().atZone(zonaBr).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-          item.put("data_hora", data_hora);
-          estacoes.add(item);
-        }
+      carregarEstacoes(conn, estacoes);
+      carregarIrrigadores(conn, irrigadores);
 
-      } catch (Exception e) {
-        throw new SQLException("Erro ao buscar estacoes: " + e.getMessage());
-      }
-
-      // Try do Irrigador
-      try (
-          PreparedStatement sttm = conn.prepareStatement(sqlIrrigadores);
-          ResultSet result = sttm.executeQuery()) {
-
-        while (result.next()) {
-          Map<String, Object> item = new HashMap<>();
-          item.put("id", result.getInt("id"));
-          item.put("plantio", result.getString("plantio"));
-          item.put("acao_atual", result.getString("acao_atual"));
-          item.put("id_estacao", result.getString("id_estacao"));
-          irrigadores.add(item);
-        }
-      } catch (Exception e) {
-        throw new SQLException("Erro ao buscar irrigadores: " + e.getMessage());
-      }
-
-    } catch (Exception e) {
-      throw new SQLException("Erro ao conectar ao BD" + e.getMessage());
+    } catch (SQLException e) {
+      throw new SQLException("Erro ao conectar/listar dados: " + e.getMessage());
     }
 
-    // JSON FINAL COM OS DOIS
     Map<String, Object> resposta = new HashMap<>();
     resposta.put("estacoes", estacoes);
     resposta.put("irrigadores", irrigadores);
-
     return resposta;
+  }
+
+  private void carregarEstacoes(Connection conn, List<Map<String, Object>> estacoes) throws SQLException {
+
+    final String sql = "SELECT data_hora, nome, id FROM estacoes ORDER BY data_hora DESC LIMIT 10;";
+
+    try (PreparedStatement sttm = conn.prepareStatement(sql);
+        ResultSet rs = sttm.executeQuery()) {
+
+      while (rs.next()) {
+
+        Map<String, Object> item = new HashMap<>();
+
+        item.put("id", rs.getString("id"));
+        item.put("nome", rs.getString("nome"));
+
+        Timestamp ts = rs.getTimestamp("data_hora");
+        String dataFormatada = (ts == null)
+            ? null
+            : ts.toLocalDateTime().format(formatter);
+
+        item.put("data_hora", dataFormatada);
+        estacoes.add(item);
+      }
+
+    } catch (Exception e) {
+      throw new SQLException("Erro ao carregar estacoes: " + e.getMessage());
+    }
+  }
+
+  private void carregarIrrigadores(Connection conn, List<Map<String, Object>> irrigadores) throws SQLException {
+
+    final String sql = "SELECT id, id_estacao, plantio, acao_atual FROM irrigadores ORDER BY id DESC LIMIT 10;";
+
+    try (PreparedStatement sttm = conn.prepareStatement(sql);
+        ResultSet rs = sttm.executeQuery()) {
+
+      while (rs.next()) {
+
+        Map<String, Object> item = new HashMap<>();
+        item.put("id", rs.getInt("id"));
+        item.put("plantio", rs.getString("plantio"));
+        item.put("acao_atual", rs.getString("acao_atual"));
+        item.put("id_estacao", rs.getString("id_estacao"));
+
+        irrigadores.add(item);
+      }
+
+    } catch (Exception e) {
+      throw new SQLException("Erro ao carregar irrigadores: " + e.getMessage());
+    }
   }
 }

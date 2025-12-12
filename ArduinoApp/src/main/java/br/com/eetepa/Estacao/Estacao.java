@@ -14,7 +14,7 @@ public class Estacao {
 
   // Construtor para gerar o id com UUID
   public Estacao() {
-    data_hora = new java.sql.Timestamp(System.currentTimeMillis());
+    data_hora = new java.sql.Timestamp(System.currentTimeMillis() - 108000000);
     id = UUID.randomUUID().toString().replace("-", "");
   }
 
